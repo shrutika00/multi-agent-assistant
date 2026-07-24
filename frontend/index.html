@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent Assistant</title>
+    <!-- Google Fonts for Clean Sans-Serif Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <span class="logo-icon">🤖</span>
+                <h1>Multi-Agent AI Coordinator</h1>
+            </div>
+            <p class="subtitle">Assignment L3-01: Collaborative Multi-Agent System</p>
+        </header>
+
+        <!-- Main Layout -->
+        <main class="app-main">
+            <!-- Left Panel: Input & Settings -->
+            <section class="input-panel">
+                <div class="card">
+                    <h2>Ask the System</h2>
+                    <p class="card-desc">Enter your question or task. The Coordinator will delegate it across specialized AI agents.</p>
+                    
+                    <form id="workflow-form">
+                        <textarea 
+                            id="user-query" 
+                            placeholder="e.g., Explain quantum computing in simple terms, detect potential misconceptions, and summarize the key benefits..."
+                            required
+                        ></textarea>
+                        
+                        <button type="submit" id="submit-btn">
+                            <span class="btn-text">Execute Workflow</span>
+                            <span class="spinner" id="btn-spinner"></span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- API Status / Health -->
+                <div class="status-card">
+                    <span class="status-dot green"></span>
+                    <span class="status-text">Backend Status: <strong id="backend-status">Checking...</strong></span>
+                </div>
+            </section>
+
+            <!-- Right Panel: Workflow Visualization & Outputs -->
+            <section class="output-panel">
+                <!-- Visual Workflow Card -->
+                <div class="card workflow-card">
+                    <h2>Agent Execution Pipeline</h2>
+                    <p class="card-desc">Real-time collaboration and information flow between agents.</p>
+                    
+                    <div class="workflow-visual">
+                        <!-- Node 1: Coordinator Start -->
+                        <div class="workflow-node" id="node-coordinator">
+                            <div class="node-indicator">
+                                <div class="dot-inner"></div>
+                            </div>
+                            <div class="node-content">
+                                <div class="node-header">
+                                    <span class="node-name">Coordinator Agent</span>
+                                    <span class="node-status badge-waiting">Waiting</span>
+                                </div>
+                                <div class="node-body">
+                                    <p class="node-msg">Ready to receive query.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-line" id="line-1"></div>
+
+                        <!-- Node 2: Research -->
+                        <div class="workflow-node" id="node-research">
+                            <div class="node-indicator">
+                                <div class="dot-inner"></div>
+                            </div>
+                            <div class="node-content">
+                                <div class="node-header">
+                                    <span class="node-name">Research Agent</span>
+                                    <span class="node-time"></span>
+                                    <span class="node-status badge-waiting">Waiting</span>
+                                </div>
+                                <div class="node-body">
+                                    <p class="node-msg">Waiting for coordinator dispatch.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-line" id="line-2"></div>
+
+                        <!-- Node 3: Fact Checker -->
+                        <div class="workflow-node" id="node-fact-check">
+                            <div class="node-indicator">
+                                <div class="dot-inner"></div>
+                            </div>
+                            <div class="node-content">
+                                <div class="node-header">
+                                    <span class="node-name">Fact Checker Agent</span>
+                                    <span class="node-time"></span>
+                                    <span class="node-status badge-waiting">Waiting</span>
+                                </div>
+                                <div class="node-body">
+                                    <p class="node-msg">Waiting for research notes.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-line" id="line-3"></div>
+
+                        <!-- Node 4: Summary -->
+                        <div class="workflow-node" id="node-summary">
+                            <div class="node-indicator">
+                                <div class="dot-inner"></div>
+                            </div>
+                            <div class="node-content">
+                                <div class="node-header">
+                                    <span class="node-name">Summary Agent</span>
+                                    <span class="node-time"></span>
+                                    <span class="node-status badge-waiting">Waiting</span>
+                                </div>
+                                <div class="node-body">
+                                    <p class="node-msg">Waiting for verified facts.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-line" id="line-4"></div>
+
+                        <!-- Node 5: QA -->
+                        <div class="workflow-node" id="node-qa">
+                            <div class="node-indicator">
+                                <div class="dot-inner"></div>
+                            </div>
+                            <div class="node-content">
+                                <div class="node-header">
+                                    <span class="node-name">Quality Assurance Agent</span>
+                                    <span class="node-time"></span>
+                                    <span class="node-status badge-waiting">Waiting</span>
+                                </div>
+                                <div class="node-body">
+                                    <p class="node-msg">Waiting for summary draft.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Response Display Area -->
+                <div class="card result-card hidden" id="result-card">
+                    <h2>Final Response</h2>
+                    <div id="final-answer-container" class="final-answer"></div>
+                    
+                    <!-- Execution Times Summary -->
+                    <div class="execution-summary">
+                        <h3>Performance Breakdown</h3>
+                        <div class="timing-grid">
+                            <div class="timing-item">
+                                <span class="timing-label">Research:</span>
+                                <strong id="time-research">-</strong>
+                            </div>
+                            <div class="timing-item">
+                                <span class="timing-label">Fact Check:</span>
+                                <strong id="time-fact-check">-</strong>
+                            </div>
+                            <div class="timing-item">
+                                <span class="timing-label">Summary:</span>
+                                <strong id="time-summary">-</strong>
+                            </div>
+                            <div class="timing-item">
+                                <span class="timing-label">QA Polish:</span>
+                                <strong id="time-qa">-</strong>
+                            </div>
+                            <div class="timing-item total">
+                                <span class="timing-label">Total Time:</span>
+                                <strong id="time-total">-</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Toggleable tabs for intermediate agent states -->
+                    <div class="tabs-container">
+                        <div class="tabs-header">
+                            <button class="tab-btn active" data-tab="tab-research">Research Notes</button>
+                            <button class="tab-btn" data-tab="tab-fact-check">Fact Check Notes</button>
+                            <button class="tab-btn" data-tab="tab-summary">Summary Draft</button>
+                        </div>
+                        <div class="tabs-content">
+                            <div class="tab-pane active" id="tab-research">
+                                <pre><code id="content-research"></code></pre>
+                            </div>
+                            <div class="tab-pane" id="tab-fact-check">
+                                <pre><code id="content-fact-check"></code></pre>
+                            </div>
+                            <div class="tab-pane" id="tab-summary">
+                                <pre><code id="content-summary"></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

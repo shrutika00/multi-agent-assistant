@@ -1,0 +1,19 @@
+# Python gitignore patterns
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/venv/
+**/.venv/
+
+# Environment files
+**/.env
+**/.env.local
+
+# IDE configurations
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

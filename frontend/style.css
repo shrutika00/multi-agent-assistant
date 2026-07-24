@@ -1,0 +1,545 @@
+/* -------------------------------------------------------------
+   RESET & SYSTEM VARIABLES
+------------------------------------------------------------- */
+:root {
+    --bg-app: #f8fafc;
+    --bg-card: #ffffff;
+    --border-color: #e2e8f0;
+    
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    
+    --primary: #2563eb;
+    --primary-light: #eff6ff;
+    --success: #16a34a;
+    --success-light: #f0fdf4;
+    --warning: #ea580c;
+    --warning-light: #fff7ed;
+    --danger: #dc2626;
+    
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --transition: all 0.2s ease-in-out;
+}
+
+/* Dark mode fallback / media query support for professional dark theme preference */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-app: #0f172a;
+        --bg-card: #1e293b;
+        --border-color: #334155;
+        
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-muted: #64748b;
+        
+        --primary: #3b82f6;
+        --primary-light: #1e293b;
+        --success: #22c55e;
+        --success-light: #14532d;
+        --warning: #f97316;
+        --warning-light: #431407;
+        --danger: #ef4444;
+    }
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* -------------------------------------------------------------
+   LAYOUT
+------------------------------------------------------------- */
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.app-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    font-size: 1.75rem;
+}
+
+.app-header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.app-main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+    .app-main {
+        grid-template-columns: 380px 1fr;
+    }
+}
+
+/* -------------------------------------------------------------
+   COMPONENTS: CARDS
+------------------------------------------------------------- */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.card h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+}
+
+/* Status bar */
+.status-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.875rem;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-dot.green {
+    background-color: var(--success);
+    box-shadow: 0 0 8px var(--success);
+}
+
+.status-dot.orange {
+    background-color: var(--warning);
+    box-shadow: 0 0 8px var(--warning);
+}
+
+.status-dot.red {
+    background-color: var(--danger);
+    box-shadow: 0 0 8px var(--danger);
+}
+
+/* -------------------------------------------------------------
+   COMPONENTS: FORMS & INPUTS
+------------------------------------------------------------- */
+#workflow-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    resize: vertical;
+    outline: none;
+    transition: var(--transition);
+}
+
+textarea:focus {
+    border-color: var(--primary);
+}
+
+button {
+    background-color: var(--primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+button:hover {
+    filter: brightness(1.1);
+}
+
+button:disabled {
+    background-color: var(--border-color);
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* -------------------------------------------------------------
+   COMPONENTS: WORKFLOW VISUALIZATION
+------------------------------------------------------------- */
+.workflow-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 0.5rem;
+}
+
+.workflow-node {
+    display: flex;
+    gap: 1.25rem;
+    position: relative;
+    z-index: 2;
+    transition: var(--transition);
+}
+
+.node-indicator {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--bg-app);
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    transition: var(--transition);
+}
+
+.dot-inner {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--text-muted);
+    transition: var(--transition);
+}
+
+.node-content {
+    flex-grow: 1;
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    transition: var(--transition);
+}
+
+.node-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.node-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.node-time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.node-status {
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.node-body {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.workflow-line {
+    width: 2px;
+    background-color: var(--border-color);
+    position: relative;
+    left: 11px;
+    height: 24px;
+    margin-top: -6px;
+    margin-bottom: -2px;
+    z-index: 1;
+    transition: var(--transition);
+}
+
+/* -------------------------------------------------------------
+   WORKFLOW STATES
+------------------------------------------------------------- */
+/* Waiting */
+.badge-waiting {
+    background-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+/* Running (Active) */
+.workflow-node.running .node-indicator {
+    border-color: var(--primary);
+    box-shadow: 0 0 8px var(--primary);
+}
+.workflow-node.running .dot-inner {
+    background-color: var(--primary);
+    animation: pulse 1.2s infinite ease-in-out;
+}
+.workflow-node.running .node-content {
+    border-color: var(--primary);
+    background-color: var(--primary-light);
+}
+.badge-running {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+
+/* Completed */
+.workflow-node.completed .node-indicator {
+    border-color: var(--success);
+    background-color: var(--success);
+}
+.workflow-node.completed .dot-inner {
+    background-color: #ffffff;
+}
+.workflow-node.completed .node-content {
+    border-color: var(--border-color);
+}
+.workflow-line.completed {
+    background-color: var(--success);
+}
+.badge-completed {
+    background-color: var(--success);
+    color: #ffffff;
+}
+
+/* Failed */
+.workflow-node.failed .node-indicator {
+    border-color: var(--danger);
+    background-color: var(--danger);
+}
+.workflow-node.failed .dot-inner {
+    background-color: #ffffff;
+}
+.workflow-node.failed .node-content {
+    border-color: var(--danger);
+    background-color: #fef2f2;
+}
+.badge-failed {
+    background-color: var(--danger);
+    color: #ffffff;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* -------------------------------------------------------------
+   COMPONENTS: RESULTS & BREAKDOWNS
+------------------------------------------------------------- */
+.hidden {
+    display: none !important;
+}
+
+.final-answer {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    padding: 1rem;
+    border-left: 3px solid var(--primary);
+    background-color: var(--bg-app);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.5rem;
+    white-space: pre-wrap; /* Preserve formatting */
+}
+
+/* Performance breakdown grid */
+.execution-summary {
+    margin-bottom: 1.5rem;
+}
+
+.execution-summary h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.timing-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+@media (min-width: 600px) {
+    .timing-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.timing-item {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+}
+
+.timing-label {
+    color: var(--text-secondary);
+}
+
+.timing-item strong {
+    font-size: 0.95rem;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+}
+
+.timing-item.total {
+    border-left: 1px solid var(--border-color);
+    padding-left: 0.75rem;
+}
+
+@media (max-width: 600px) {
+    .timing-item.total {
+        grid-column: span 2;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+        padding-left: 0;
+        padding-top: 0.5rem;
+        margin-top: 0.25rem;
+    }
+}
+
+/* -------------------------------------------------------------
+   COMPONENTS: TABS FOR DEEP ANALYSIS
+------------------------------------------------------------- */
+.tabs-container {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.tabs-header {
+    display: flex;
+    background-color: var(--bg-app);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tab-btn {
+    flex-grow: 1;
+    background: none;
+    color: var(--text-secondary);
+    border: none;
+    border-radius: 0;
+    padding: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+}
+
+.tab-btn:hover {
+    background-color: var(--border-color);
+}
+
+.tab-btn.active {
+    background-color: var(--bg-card);
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+}
+
+.tabs-content {
+    background-color: var(--bg-card);
+    padding: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-primary);
+}
